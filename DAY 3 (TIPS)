@@ -1,0 +1,59 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+#Load the tios dataset
+df=sns.load_dataset("tips")
+
+#Preview the data
+df.head()
+
+#Check data types
+#(df.dtypes)
+
+#Convert sex and smoker to category type
+df['sex']=df['sex'].astype('category')
+df['smoker']=df['smoker'].astype('category')
+#print(df.dtypes)
+
+#create a new column:Tip Percentage
+df['tip_pct']=(df['tip']/df['total_bill'])*100
+#print(df.head())
+
+#Round to 2 decimal places
+df['tip_pct']=df['tip_pct'].round(2)
+#print(df)
+
+#Preview updated DataFrame
+df[['total_bill','tip','tip_pct']].head()
+#print(df)
+
+#Avg tip per by gender
+avg_tip_by_gender=df.groupby('sex')['tip_pct'].mean()
+#print(avg_tip_by_gender)
+
+#Average tip percentage by smoker
+avg_tip_by_smoker=df.groupby('smoker')['tip_pct'].mean()
+#print(avg_tip_by_smoker)
+
+
+#avg
+avg_tip_by_day_time=df.groupby(['day','time'])['tip_pct'].mean()
+print(avg_tip_by_day_time)
+
+#bar plot:Tip % by gender
+sns.barplot(x='sex',y='tip_pct',data=df)
+plt.title("Tip Percentage by Gender")
+plt.xlabel("Gender")
+plt.ylabel("Tip Percentage")
+plt.show()
+
+#bar plot:tip % by smoker status
+sns.barplot(x='smoker',y='tip_pct',data=df)
+plt.title("Tip Percentage by Smoker Status")
+plt.xlabel("Smoker Status")
+plt.ylabel("Tip Percentage")
+plt.show()
+
+
+
